@@ -2,22 +2,29 @@
 
 $channelId = substr($_SERVER['REQUEST_URI'], 1);
 
-function notFoundError(): void
+function notFoundErrorResponse(): void
 {
     http_response_code(404);
     echo json_encode(['error' => 'Not found']);
     exit;
 }
 
-function internalServerError(): void
+function internalServerErrorResponse(): void
 {
     http_response_code(500);
     echo json_encode(['error' => 'Internal Server Error']);
     exit;
 }
 
+function successResponse(?string $twitterHandle): void
+{
+    http_response_code(200);
+    echo json_encode(['twitter_handle' => $twitterHandle]);
+    exit;
+}
+
 if (! $channelId) {
-    notFoundError();
+    notFoundErrorResponse();
 }
 
 $config = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
@@ -33,7 +40,7 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    internalServerError();
+    internalServerErrorResponse();
 }
 
 $requestParams = ['request' => $channelId];
@@ -42,14 +49,14 @@ try {
     $statement->execute($requestParams);
 } catch (PDOException $e) {
     $connection = null;
-    internalServerError();
+    internalServerErrorResponse();
 }
 
 $fetchedRequests = $statement->fetchAll();
 
 if ($fetchedRequests) {
     $connection = null;
-    notFoundError();
+    notFoundErrorResponse();
 }
 
 try {
@@ -57,15 +64,14 @@ try {
     $statement->execute(['youtube_id' => $channelId]);
 } catch (PDOException $e) {
     $connection = null;
-    internalServerError();
+    internalServerErrorResponse();
 }
 
 $fetchedChannels = $statement->fetchAll();
 
 if ($fetchedChannels) {
-    http_response_code(200);
-    echo json_encode(['twitter_handle' => $fetchedChannels[0]['twitter_handle'] ?? null]);
-    exit;
+    $connection = null;
+    successResponse($fetchedChannels[0]['twitter_handle'] ?? null);
 }
 
 set_time_limit(120);
@@ -78,11 +84,11 @@ if ($scrapingResult === 'not found') {
         $statement->execute($requestParams);
     } catch (PDOException $e) {
         $connection = null;
-        internalServerError();
+        internalServerErrorResponse();
     }
 
     $connection = null;
-    notFoundError();
+    notFoundErrorResponse();
 }
 
 if ($scrapingResult === 'null') {
@@ -94,9 +100,8 @@ try {
     $statement->execute(['youtube_id' => $channelId, 'twitter_handle' => $scrapingResult]);
 } catch (PDOException $e) {
     $connection = null;
-    internalServerError();
+    internalServerErrorResponse();
 }
 
-http_response_code(200);
-echo json_encode(['twitter_handle' => $scrapingResult]);
-exit;
+$connection = null;
+successResponse($scrapingResult);
