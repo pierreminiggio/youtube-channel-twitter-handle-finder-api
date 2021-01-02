@@ -1,6 +1,6 @@
 # youtube-channel-twitter-handle-finder-api
 
-You get JSON response calling : https://yourprojecturl/yourYoutubeChannelId
+You get a JSON response calling : https://yourprojecturl/yourYoutubeChannelId
 
 Prerequisites :
 - PHP7
