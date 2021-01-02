@@ -21,7 +21,7 @@ Database :
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  ven. 01 jan. 2021 à 23:37
+-- Généré le :  sam. 02 jan. 2021 à 00:14
 -- Version du serveur :  5.7.17
 -- Version de PHP :  5.6.30
 
@@ -43,15 +43,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `channels`
+-- Structure de la table `channel`
 --
 
-CREATE TABLE `channels` (
+CREATE TABLE `channel` (
   `id` int(11) NOT NULL,
   `youtube_id` text NOT NULL,
-  `twitter_handle` text NOT NULL,
+  `twitter_handle` text,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `unprocessable_request`
+--
+
+CREATE TABLE `unprocessable_request` (
+  `id` int(11) NOT NULL,
+  `request` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -59,9 +71,15 @@ CREATE TABLE `channels` (
 --
 
 --
--- Index pour la table `channels`
+-- Index pour la table `channel`
 --
-ALTER TABLE `channels`
+ALTER TABLE `channel`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `unprocessable_request`
+--
+ALTER TABLE `unprocessable_request`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -69,9 +87,14 @@ ALTER TABLE `channels`
 --
 
 --
--- AUTO_INCREMENT pour la table `channels`
+-- AUTO_INCREMENT pour la table `channel`
 --
-ALTER TABLE `channels`
+ALTER TABLE `channel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `unprocessable_request`
+--
+ALTER TABLE `unprocessable_request`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
