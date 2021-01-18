@@ -37,7 +37,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `youtube-channel-twitter-handle-finder`
+-- Base de données :  `youtube_channel_twitter_handle_finder`
 --
 
 -- --------------------------------------------------------
