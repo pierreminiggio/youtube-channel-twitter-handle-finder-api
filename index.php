@@ -1,6 +1,6 @@
 <?php
 
-$channelId = substr($_SERVER['REQUEST_URI'], 1);
+$channelId = explode('?', substr($_SERVER['REQUEST_URI'], 1))[0];
 
 function notFoundErrorResponse(): void
 {
