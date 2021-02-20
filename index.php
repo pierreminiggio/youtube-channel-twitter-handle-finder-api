@@ -41,6 +41,12 @@ if (! $channelId) {
     notFoundErrorResponse();
 }
 
+preg_match('/^UC[\w-]{21}[AQgw]/', $channelId, $matches);
+
+if (count($matches) !== 1) {
+    notFoundErrorResponse();
+}
+
 $config = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 
 try {
@@ -74,6 +80,7 @@ if ($fetchedRequests) {
 }
 
 try {
+    /** @var PDO $connection */
     $statement = $connection->prepare('SELECT twitter_handle FROM channel WHERE youtube_id = :youtube_id;');
     $statement->execute(['youtube_id' => $channelId]);
 } catch (PDOException $e) {
