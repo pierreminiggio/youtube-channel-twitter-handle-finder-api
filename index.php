@@ -96,36 +96,12 @@ if ($fetchedChannels) {
 }
 
 // Check if channel exists on Youtube API
-$accessTokenCurl = curl_init();
-curl_setopt_array($accessTokenCurl, [
-    CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://www.googleapis.com/oauth2/v4/token',
-    CURLOPT_POST => 1,
-    CURLOPT_POSTFIELDS => http_build_query([
-        'client_id' => $config['client_id'],
-        'client_secret' => $config['client_secret'],
-        'refresh_token' => $config['refresh_token'],
-        'grant_type' => 'refresh_token'
-    ])
-]);
-$accessTokenCurlResult = curl_exec($accessTokenCurl);
-
-if ($accessTokenCurlResult === false) {
-    internalServerErrorResponse();
-}
-
-$accessTokenJsonResponse = json_decode($accessTokenCurlResult);
-if (! empty($accessTokenJsonResponse->error)) {
-    internalServerErrorResponse();
-}
 
 $curl = curl_init();
 curl_setopt_array($curl, [
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://www.googleapis.com/youtube/v3/channels?id=' . $channelId
+    CURLOPT_URL => 'https://youtube-channel-infos-api.miniggiodev.fr/' . $channelId
 ]);
-$authorization = "Authorization: Bearer " . $accessTokenJsonResponse->access_token;
-curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/json' , $authorization]);
 
 $result = curl_exec($curl);
 
@@ -133,12 +109,8 @@ if ($result === false) {
     internalServerErrorResponse();
 }
 
-$jsonResponse = json_decode($result);
-if (! empty($jsonResponse->error)) {
-    internalServerErrorResponse();
-}
-
-if (empty($jsonResponse->pageInfo) || empty($jsonResponse->pageInfo->totalResults)) {
+if (empty($result)) {
+    /** @var PDO $connection */
     setAsUnprocessableRequest($connection, $requestParams);
 }
 
