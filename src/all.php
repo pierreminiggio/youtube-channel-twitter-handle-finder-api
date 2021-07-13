@@ -17,7 +17,7 @@ try {
 }
 
 try {
-    $statement = $connection->prepare('SELECT youtube_id, twitter_handle FROM channel;');
+    $statement = $connection->prepare('SELECT youtube_id, twitter_handle, updated_at FROM channel;');
     $statement->execute();
 } catch (PDOException $e) {
     $connection = null;
@@ -30,7 +30,8 @@ http_response_code(200);
 
 echo json_encode(array_map(fn (array $fetchedChannel): array => [
     'youtube_id' => $fetchedChannel['youtube_id'],
-    'twitter_handle' => $fetchedChannel['twitter_handle']
+    'twitter_handle' => $fetchedChannel['twitter_handle'],
+    'updated_at' => $fetchedChannel['updated_at']
 ], $fetchedChannels));
 
 $connection = null;
