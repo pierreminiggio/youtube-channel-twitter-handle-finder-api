@@ -41,13 +41,20 @@ if (! $channelId) {
     notFoundErrorResponse();
 }
 
+$projectDir = __DIR__ . DIRECTORY_SEPARATOR;
+
+if ($channelId === 'all') {
+    require $projectDir . 'src' . DIRECTORY_SEPARATOR . 'all.php';
+    exit;
+}
+
 preg_match('/^UC[\w-]{21}[AQgw]/', $channelId, $matches);
 
 if (count($matches) !== 1) {
     notFoundErrorResponse();
 }
 
-$config = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+$config = require $projectDir . 'config.php';
 
 try {
     $connection = new PDO(
