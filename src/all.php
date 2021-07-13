@@ -32,3 +32,5 @@ echo json_encode(array_map(fn (array $fetchedChannel): array => [
     'youtube_id' => $fetchedChannel['youtube_id'],
     'twitter_handle' => $fetchedChannel['twitter_handle']
 ], $fetchedChannels));
+
+$connection = null;

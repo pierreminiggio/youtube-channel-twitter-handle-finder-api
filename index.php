@@ -2,6 +2,13 @@
 
 $channelId = explode('?', substr($_SERVER['REQUEST_URI'], 1))[0];
 
+function badRequestErrorResponse(?string $error = null): void
+{
+    http_response_code(400);
+    echo json_encode(['error' => 'Bad request' . ($error ? ' : ' . $error : '')]);
+    exit;
+}
+
 function notFoundErrorResponse(): void
 {
     http_response_code(404);
@@ -41,10 +48,33 @@ if (! $channelId) {
     notFoundErrorResponse();
 }
 
+$channelApiUrl = 'https://youtube-channel-infos-api.miniggiodev.fr';
+
+$getYoutubeChannelInfos = function (string $channelId) use ($channelApiUrl): ?string {
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => $channelApiUrl . '/' . $channelId
+    ]);
+
+    $result = curl_exec($curl);
+
+    if ($result === false) {
+        internalServerErrorResponse();
+    }
+
+    return $result;
+};
+
 $projectDir = __DIR__ . DIRECTORY_SEPARATOR;
 
 if ($channelId === 'all') {
     require $projectDir . 'src' . DIRECTORY_SEPARATOR . 'all.php';
+    exit;
+}
+
+if ($channelId === 'tenchi-news') {
+    require $projectDir . 'src' . DIRECTORY_SEPARATOR . 'tenchi-news-update.php';
     exit;
 }
 
@@ -104,17 +134,7 @@ if ($fetchedChannels) {
 
 // Check if channel exists on Youtube API
 
-$curl = curl_init();
-curl_setopt_array($curl, [
-    CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://youtube-channel-infos-api.miniggiodev.fr/' . $channelId
-]);
-
-$result = curl_exec($curl);
-
-if ($result === false) {
-    internalServerErrorResponse();
-}
+$result = $getYoutubeChannelInfos($channelId);
 
 if (empty($result)) {
     /** @var PDO $connection */
