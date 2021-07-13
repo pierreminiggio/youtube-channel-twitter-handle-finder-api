@@ -77,6 +77,7 @@ foreach ($jsonBody as $jsonBodyEntryIndex => $jsonBodyEntry) {
     if (! $channelInfos) {
         $badChannelMessages[] =
             'Youtube channel id "' . $channelId . '" passed at entry ' . $jsonBodyEntryIndex . ' seems to be invalid';
+        continue;
     }
 
     $storedChannel = $getStoredIdAndTwitterHandle($channelId);
