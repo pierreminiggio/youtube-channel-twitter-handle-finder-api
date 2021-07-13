@@ -9,6 +9,13 @@ function badRequestErrorResponse(?string $error = null): void
     exit;
 }
 
+function unauthorizedErrorResponse(): void
+{
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
+}
+
 function notFoundErrorResponse(): void
 {
     http_response_code(404);

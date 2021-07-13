@@ -1,5 +1,14 @@
 <?php
 
+$config = require $projectDir . 'config.php';
+$token = $config['tenchi_token'];
+
+$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+if (! $authHeader || $authHeader !== 'Bearer ' . $token) {
+    unauthorizedErrorResponse();
+}
+
 $body = file_get_contents('php://input');
 
 if (! $body) {
@@ -11,8 +20,6 @@ $jsonBody = json_decode($body, true);
 if (! $jsonBody) {
     badRequestErrorResponse('Bad JSON body');
 }
-
-$config = require $projectDir . 'config.php';
 
 try {
     $connection = new PDO(
