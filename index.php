@@ -88,7 +88,7 @@ if ($channelId === 'tenchi-news') {
 
 $reversePrefix = 'reverse/';
 
-if (str_starts_with($channelId, $reversePrefix) {
+if (str_starts_with($channelId, $reversePrefix)) {
     $twitterHandle = substr($channelId, strlen($reversePrefix));
     require $srcDir . 'reverse.php';
     exit;
