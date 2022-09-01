@@ -27,18 +27,25 @@ try {
 $fetchedChannels = $statement->fetchAll();
 
 if (! $fetchedChannels) {
-  notFoundErrorResponse();
+    notFoundErrorResponse();
 }
 
 $channelId = $fetchedChannels[0]['youtube_id'];
 
 if (! $channelId) {
-  internalServerErrorResponse();
-  exit;
+    internalServerErrorResponse();
+    exit;
+}
+
+$channelInfos = $getYoutubeChannelInfos($channelId);
+
+if (! $channelInfos) {
+    internalServerErrorResponse();
+    exit;
 }
 
 http_response_code(200);
 
-echo json_encode(['channelId' => $channelId]);
+echo $channelInfos;
 
 $connection = null;
