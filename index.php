@@ -74,14 +74,15 @@ $getYoutubeChannelInfos = function (string $channelId) use ($channelApiUrl): ?st
 };
 
 $projectDir = __DIR__ . DIRECTORY_SEPARATOR;
+$srcDir = $projectDir . 'src' . DIRECTORY_SEPARATOR;
 
 if ($channelId === 'all') {
-    require $projectDir . 'src' . DIRECTORY_SEPARATOR . 'all.php';
+    require $srcDir . 'all.php';
     exit;
 }
 
 if ($channelId === 'tenchi-news') {
-    require $projectDir . 'src' . DIRECTORY_SEPARATOR . 'tenchi-news-update.php';
+    require $srcDir . 'tenchi-news-update.php';
     exit;
 }
 
