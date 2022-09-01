@@ -86,6 +86,14 @@ if ($channelId === 'tenchi-news') {
     exit;
 }
 
+$reversePrefix = 'reverse/';
+
+if (str_starts_with($channelId, $reversePrefix) {
+    $twitterHandle = substr($channelId, strlen($reversePrefix));
+    require $srcDir . 'reverse.php';
+    exit;
+}
+
 preg_match('/^UC[\w-]{21}[AQgw]/', $channelId, $matches);
 
 if (count($matches) !== 1) {
