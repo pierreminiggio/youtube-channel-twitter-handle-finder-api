@@ -52,6 +52,6 @@ foreach ($fetchedChannels as $fetchedChannel) {
 
 http_response_code(200);
 
-echo '[' . implode(',', $channelInfos) . ']';
+echo '[' . implode(',', $channelsInfos) . ']';
 
 $connection = null;
