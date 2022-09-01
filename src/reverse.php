@@ -30,22 +30,28 @@ if (! $fetchedChannels) {
     notFoundErrorResponse();
 }
 
-$channelId = $fetchedChannels[0]['youtube_id'];
+$channelsInfos = [];
 
-if (! $channelId) {
-    internalServerErrorResponse();
-    exit;
-}
+foreach ($fetchedChannels as $fetchedChannel) {
+    $channelId = $fetchedChannel['youtube_id'];
 
-$channelInfos = $getYoutubeChannelInfos($channelId);
+    if (! $channelId) {
+        internalServerErrorResponse();
+        exit;
+    }
 
-if (! $channelInfos) {
-    internalServerErrorResponse();
-    exit;
+    $channelInfos = $getYoutubeChannelInfos($channelId);
+
+    if (! $channelInfos) {
+        internalServerErrorResponse();
+        exit;
+    }
+    
+    $channelsInfos[] = $channelInfos;
 }
 
 http_response_code(200);
 
-echo $channelInfos;
+echo '[' . implode(',', $channelInfos) . ']';
 
 $connection = null;
